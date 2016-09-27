@@ -217,11 +217,27 @@ static NSString * const kSkipButtonText = @"Skip";
         [self.pageVC.view sendSubviewToBack:self.moviePlayerController.view];
     }
     
-    // create the page control
+    // create and configure the page control
+    if (CGRectGetMaxX(self.view.frame) > CGRectGetMaxY(self.view.frame))
+    {
+        self.pageControl.frame = CGRectMake(0, CGRectGetMaxX(self.view.frame) - self.underPageControlPadding - kPageControlHeight, self.view.frame.size.width, kPageControlHeight);
+    }
+    else
+    {
+        self.pageControl.frame = CGRectMake(0, CGRectGetMaxY(self.view.frame) - self.underPageControlPadding - kPageControlHeight, self.view.frame.size.width, kPageControlHeight);
+    }
     [self.view addSubview:self.pageControl];
     
     // if we allow skipping, setup the skip button
     if (self.allowSkipping) {
+        if (CGRectGetMaxX(self.view.frame) > CGRectGetMaxY(self.view.frame))
+        {
+            self.skipButton.frame = CGRectMake(CGRectGetMaxY(self.view.frame) - kSkipButtonWidth, CGRectGetMaxX(self.view.frame) - self.underPageControlPadding - kSkipButtonHeight, kSkipButtonWidth, kSkipButtonHeight);
+        }
+        else
+        {
+            self.skipButton.frame = CGRectMake(CGRectGetMaxX(self.view.frame) - kSkipButtonWidth, CGRectGetMaxY(self.view.frame) - self.underPageControlPadding - kSkipButtonHeight, kSkipButtonWidth, kSkipButtonHeight);
+        }
         [self.view addSubview:self.skipButton];
     }
     
@@ -368,7 +384,7 @@ static NSString * const kSkipButtonText = @"Skip";
         }
 
         else if (transitioningFromLastPage) {
-            self.skipButton.alpha = percentComplete;
+            _skipButton.alpha = percentComplete;
         }
     }
 }
